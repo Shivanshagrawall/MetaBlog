@@ -10,6 +10,7 @@ import SingleBlog from './pages/SingleBlog'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { ToastContainer } from 'react-toastify';
+import Dashboard from './pages/Dashboard'
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route path='/contact' element={<Contact/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<SignUp/>}/>
+        <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path='/blog/:id' element={<SingleBlog/>}/>
       </Routes>
       <Footer/>

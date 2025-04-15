@@ -1,16 +1,26 @@
 import { createContext, useEffect, useState } from "react";
-import { blogData } from "../assets/assets";
-
+import axios from "axios";
 export const StoreContext=createContext(null);
-
 const StoreContextProvider=({children})=>{
     const [user,setUser]=useState(null);
-
+    const [blogData,setBlogData]=useState([]);
     useEffect(()=>{
         const storedUser=localStorage.getItem("user");
         if(storedUser){
             setUser(storedUser);
         }
+    },[]);
+
+    useEffect(()=>{
+        const allBlogs=async()=>{
+            try {
+                const res=await axios.get("http://localhost:4000/blog/all");
+                setBlogData(res.data.blogs);
+            } catch (error) {
+                console.log("error in all blogs api",error);
+            }
+        }
+        allBlogs();
     },[])
 
     const loginUser=(user,token)=>{

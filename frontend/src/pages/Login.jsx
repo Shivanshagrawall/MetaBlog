@@ -15,7 +15,7 @@ const Login = () => {
   const [loading,setLoading]=useState(false);
 
   const {loginUser}=useContext(StoreContext);
-  const {token}=localStorage.getItem("token");
+  const token=localStorage.getItem("token");
 
   const onChangeHandler=(e)=>{
     setFormData({...formData,[e.target.name]:e.target.value});
