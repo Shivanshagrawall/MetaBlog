@@ -9,6 +9,7 @@ import SignUp from './pages/SignUp'
 import SingleBlog from './pages/SingleBlog'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
         <Route path='/blog/:id' element={<SingleBlog/>}/>
       </Routes>
       <Footer/>
+      <ToastContainer/>
     </div>
   )
 }
