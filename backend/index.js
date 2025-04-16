@@ -1,37 +1,101 @@
+// import express from "express";
+// import cors from "cors";
+// import dotenv from "dotenv";
+// import { connectDB } from "./config/connectionDb.js";
+// import userRoutes from './routes/user.routes.js';
+// import blogRoutes from './routes/blog.routes.js';
+
+// dotenv.config();
+
+// const app=express();
+
+// Middleware
+// app.use(express.json());
+// app.use(cors());
+// const corsConfig = {
+//     origin: '',
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE']
+// }
+// app.use(cors(corsConfig));
+// app.options("", cors(corsConfig));
+// await connectDB();
+
+// app.get("/",(req,res)=>{
+//     res.send("Hello World!!!");
+// })
+
+// API endpoint
+// app.use("/images",express.static("uploads"));
+// app.use("/user",userRoutes);
+// app.use("/blog",blogRoutes);
+
+// const PORT=process.env.PORT || 4000;
+
+// app.listen(PORT,()=>{
+//     console.log(`Server is running on port ${PORT}`);
+// })
+
+// index.js
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/connectionDb.js";
-import userRoutes from './routes/user.routes.js';
-import blogRoutes from './routes/blog.routes.js';
+import userRoutes from "./routes/user.routes.js";
+import blogRoutes from "./routes/blog.routes.js";
 
 dotenv.config();
 
-const app=express();
+const app = express();
 
-// Middleware
+// Middleware for parsing JSON
 app.use(express.json());
-// app.use(cors());
+
+// Configure CORS settings
 const corsConfig = {
-    origin: '',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
-}
+  origin: "", // Set this to the allowed origin (e.g., "https://yourdomain.com")
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"]
+};
 app.use(cors(corsConfig));
 app.options("", cors(corsConfig));
-await connectDB();
 
-app.get("/",(req,res)=>{
-    res.send("Hello World!!!");
-})
+// Flag to indicate if the database is connected
+let isDBConnected = false;
 
-// API endpoint
-app.use("/images",express.static("uploads"));
-app.use("/user",userRoutes);
-app.use("/blog",blogRoutes);
+// Attempt to connect to the database asynchronously.
+// If the connection fails, ensure you catch the error and log it.
+connectDB()
+  .then(() => {
+    isDBConnected = true;
+    console.log("Database connected successfully.");
+  })
+  .catch((error) => {
+    console.error("Database connection failed:", error);
+  });
 
-const PORT=process.env.PORT || 4000;
+// Middleware to hold requests until the DB connection is ready.
+app.use((req, res, next) => {
+  if (!isDBConnected) {
+    return res
+      .status(503)
+      .send("Database is not connected yet, please try again later.");
+  }
+  next();
+});
 
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`);
-})
+// Basic route to test server
+app.get("/", (req, res) => {
+  res.send("Hello World!!!");
+});
+
+// Serve static files (ensure the 'uploads' directory exists)
+app.use("/images", express.static("uploads"));
+
+// API endpoints
+app.use("/user", userRoutes);
+app.use("/blog", blogRoutes);
+
+// IMPORTANT: Do NOT call app.listen() when deploying as a serverless function.
+// Instead, export the Express app so Vercel can handle the server instantiation.
+export default app;
