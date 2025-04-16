@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { StoreContext } from '../context/StoreContext';
 
 const SignUp = () => {
 
@@ -10,7 +11,9 @@ const SignUp = () => {
     email:"",
     password:"",
     image:null,
-  })
+  });
+
+  const {backendUrl}=useContext(StoreContext);
 
   const naviagate=useNavigate();
   const [loading,setLoading]=useState(false);
@@ -32,7 +35,7 @@ const SignUp = () => {
       data.append("password",formData.password);
       data.append("image",formData.image);
       setLoading(true);
-      const res=await axios.post("http://localhost:4000/user/register",data,{
+      const res=await axios.post(backendUrl+"/user/register",data,{
         headers:{
           "Content-Type":"multipart/form-data", 
         }

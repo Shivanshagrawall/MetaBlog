@@ -5,6 +5,8 @@ import { toast} from 'react-toastify'
 const Dashboard = () => {
   const [activeTab,setActiveTab]=useState("list");
   const token=localStorage.getItem("token");
+    // const contextValue={blogData,user,loginUser,logoutUser,backendUrl};
+    const {blogData,user,loginUser,logoutUser,backendUrl}=useContext(StoreContext);
   const [formData,setFormData]=useState({
     title:"",
     category:"",
@@ -29,7 +31,7 @@ const Dashboard = () => {
     data.append("description",formData.description);
     data.append("image",formData.image);
     try {
-      const res=await axios.post("http://localhost:4000/blog/create",formData,{
+      const res=await axios.post(backendUrl+"/blog/create",formData,{
         headers:{
           "Content-Type":"multipart/form-data",
           Authorization:`Bearer ${token}`
@@ -48,7 +50,7 @@ const Dashboard = () => {
   useEffect(()=>{
     const allBlogs=async()=>{
       try {
-        const res=await axios.get('http://localhost:4000/blog/all',{
+        const res=await axios.get(backendUrl+'/blog/all',{
           headers:{
             Authorization:`Bearer ${token}`,
           }
@@ -64,16 +66,13 @@ const Dashboard = () => {
   const removeBlog=async(blogId)=>{
     try {
       toast.success("Blog delete sucessfully. Please refresh the page");
-      const res=await axios.delete(`http://localhost:4000/blog/delete/${blogId}`,{
+      const res=await axios.delete(backendUrl+`/blog/delete/${blogId}`,{
         headers:{
           Authorization:`Bearer ${token}`,
         }
       });
-      console.log("2");
       toast.success(res.data.message);
-      console.log("3");
       setBlogs(blogs.filter((blog)=>blog._id!==blogId));
-      console.log("4");
     } catch (error) {
       console.log("error",error);
     }

@@ -4,6 +4,7 @@ export const StoreContext=createContext(null);
 const StoreContextProvider=({children})=>{
     const [user,setUser]=useState(null);
     const [blogData,setBlogData]=useState([]);
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
     useEffect(()=>{
         const storedUser=localStorage.getItem("user");
         if(storedUser){
@@ -14,7 +15,7 @@ const StoreContextProvider=({children})=>{
     useEffect(()=>{
         const allBlogs=async()=>{
             try {
-                const res=await axios.get("http://localhost:4000/blog/all");
+                const res=await axios.get(backendUrl+"/blog/all");
                 setBlogData(res.data.blogs);
             } catch (error) {
                 console.log("error in all blogs api",error);
@@ -34,7 +35,7 @@ const StoreContextProvider=({children})=>{
         localStorage.removeItem("user");
         localStorage.removeItem("token");
     }
-    const contextValue={blogData,user,loginUser,logoutUser};
+    const contextValue={blogData,user,loginUser,logoutUser,backendUrl};
 
     return(
         <StoreContext.Provider value={contextValue}>

@@ -14,7 +14,7 @@ const Login = () => {
   const navigate=useNavigate();
   const [loading,setLoading]=useState(false);
 
-  const {loginUser}=useContext(StoreContext);
+  const {loginUser,backendUrl}=useContext(StoreContext);
   const token=localStorage.getItem("token");
 
   const onChangeHandler=(e)=>{
@@ -25,7 +25,7 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res=await axios.post("http://localhost:4000/user/login",formData,{
+      const res=await axios.post(backendUrl+"/user/login",formData,{
         headers:{
           "Content-Type":"application/json",
         }
