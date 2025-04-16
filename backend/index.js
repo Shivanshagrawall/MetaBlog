@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/connectionDb.js";
 import userRoutes from './routes/user.routes.js';
 import blogRoutes from './routes/blog.routes.js';
+import { createServer } from "@vercel/express";
 
 dotenv.config();
 
@@ -23,8 +24,11 @@ app.use("/user",userRoutes);
 app.use("/blog",blogRoutes);
 
 const PORT=process.env.PORT || 4000;
+connectDB();
 
-app.listen(PORT,()=>{
-    connectDB();
-    console.log(`Server is running on port ${PORT}`);
-})
+// app.listen(PORT,()=>{
+    
+//     console.log(`Server is running on port ${PORT}`);
+// })
+
+export default createServer(app);
