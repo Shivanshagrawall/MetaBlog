@@ -1,34 +1,34 @@
-// import express from "express";
-// import cors from "cors";
-// import dotenv from "dotenv";
-// import { connectDB } from "./config/connectionDb.js";
-// import userRoutes from './routes/user.routes.js';
-// import blogRoutes from './routes/blog.routes.js';
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import { connectDB } from "./config/connectionDb.js";
+import userRoutes from './routes/user.routes.js';
+import blogRoutes from './routes/blog.routes.js';
 
-// dotenv.config();
+dotenv.config();
 
-// const app=express();
+const app=express();
 
 // Middleware
-// app.use(express.json());
+app.use(express.json());
 // app.use(cors());
-// const corsConfig = {
-//     origin: '',
-//     credentials: true,
-//     methods: ['GET', 'POST', 'PUT', 'DELETE']
-// }
-// app.use(cors(corsConfig));
-// app.options("", cors(corsConfig));
-// await connectDB();
+const corsConfig = {
+    origin: '',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+}
+app.use(cors(corsConfig));
+app.options("", cors(corsConfig));
+await connectDB();
 
-// app.get("/",(req,res)=>{
-//     res.send("Hello World!!!");
-// })
+app.get("/",(req,res)=>{
+    res.send("Hello World!!!");
+})
 
 // API endpoint
-// app.use("/images",express.static("uploads"));
-// app.use("/user",userRoutes);
-// app.use("/blog",blogRoutes);
+app.use("/images",express.static("uploads"));
+app.use("/user",userRoutes);
+app.use("/blog",blogRoutes);
 
 // const PORT=process.env.PORT || 4000;
 
@@ -36,66 +36,68 @@
 //     console.log(`Server is running on port ${PORT}`);
 // })
 
-// index.js
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import { connectDB } from "./config/connectionDb.js";
-import userRoutes from "./routes/user.routes.js";
-import blogRoutes from "./routes/blog.routes.js";
 
-dotenv.config();
 
-const app = express();
+// // index.js
+// import express from "express";
+// import cors from "cors";
+// import dotenv from "dotenv";
+// import { connectDB } from "./config/connectionDb.js";
+// import userRoutes from "./routes/user.routes.js";
+// import blogRoutes from "./routes/blog.routes.js";
 
-// Middleware for parsing JSON
-app.use(express.json());
+// dotenv.config();
 
-// Configure CORS settings
-const corsConfig = {
-  origin: "", // Set this to the allowed origin (e.g., "https://yourdomain.com")
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"]
-};
-app.use(cors(corsConfig));
-app.options("", cors(corsConfig));
+// const app = express();
 
-// Flag to indicate if the database is connected
-let isDBConnected = false;
+// // Middleware for parsing JSON
+// app.use(express.json());
 
-// Attempt to connect to the database asynchronously.
-// If the connection fails, ensure you catch the error and log it.
-connectDB()
-  .then(() => {
-    isDBConnected = true;
-    console.log("Database connected successfully.");
-  })
-  .catch((error) => {
-    console.error("Database connection failed:", error);
-  });
+// // Configure CORS settings
+// const corsConfig = {
+//   origin: "", // Set this to the allowed origin (e.g., "https://yourdomain.com")
+//   credentials: true,
+//   methods: ["GET", "POST", "PUT", "DELETE"]
+// };
+// app.use(cors(corsConfig));
+// app.options("", cors(corsConfig));
 
-// Middleware to hold requests until the DB connection is ready.
-app.use((req, res, next) => {
-  if (!isDBConnected) {
-    return res
-      .status(503)
-      .send("Database is not connected yet, please try again later.");
-  }
-  next();
-});
+// // Flag to indicate if the database is connected
+// let isDBConnected = false;
 
-// Basic route to test server
-app.get("/", (req, res) => {
-  res.send("Hello World!!!");
-});
+// // Attempt to connect to the database asynchronously.
+// // If the connection fails, ensure you catch the error and log it.
+// connectDB()
+//   .then(() => {
+//     isDBConnected = true;
+//     console.log("Database connected successfully.");
+//   })
+//   .catch((error) => {
+//     console.error("Database connection failed:", error);
+//   });
 
-// Serve static files (ensure the 'uploads' directory exists)
-app.use("/images", express.static("uploads"));
+// // Middleware to hold requests until the DB connection is ready.
+// app.use((req, res, next) => {
+//   if (!isDBConnected) {
+//     return res
+//       .status(503)
+//       .send("Database is not connected yet, please try again later.");
+//   }
+//   next();
+// });
 
-// API endpoints
-app.use("/user", userRoutes);
-app.use("/blog", blogRoutes);
+// // Basic route to test server
+// app.get("/", (req, res) => {
+//   res.send("Hello World!!!");
+// });
 
-// IMPORTANT: Do NOT call app.listen() when deploying as a serverless function.
-// Instead, export the Express app so Vercel can handle the server instantiation.
-export default app;
+// // Serve static files (ensure the 'uploads' directory exists)
+// app.use("/images", express.static("uploads"));
+
+// // API endpoints
+// app.use("/user", userRoutes);
+// app.use("/blog", blogRoutes);
+
+// // IMPORTANT: Do NOT call app.listen() when deploying as a serverless function.
+// // Instead, export the Express app so Vercel can handle the server instantiation.
+// export default app;
