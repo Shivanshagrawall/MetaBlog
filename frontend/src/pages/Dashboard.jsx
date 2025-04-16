@@ -131,7 +131,7 @@ const Dashboard = () => {
                       <td className='border px-4 py-2'>{blog.title}</td>
                       <td className='border px-4 py-2'>{blog.category}</td>
                       <td className='border px-4 py-2'>
-                        <img src={`http://localhost:4000/images/${blog.image}`} alt={blog.title} 
+                        <img src={backendUrl+`/images/${blog.image}`} alt={blog.title} 
                         className='w-16 h-16 object-cover mx-auto' />
                       </td>
                       <td className='border px-4 py-2 cursor-pointer' onClick={()=>removeBlog(blog._id)}>

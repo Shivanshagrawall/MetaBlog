@@ -12,6 +12,7 @@ const app=express();
 // Middleware
 app.use(express.json());
 app.use(cors());
+await connectDB();
 
 app.get("/",(req,res)=>{
     res.send("Hello World!!!");
@@ -25,6 +26,5 @@ app.use("/blog",blogRoutes);
 const PORT=process.env.PORT || 4000;
 
 app.listen(PORT,()=>{
-    connectDB();
     console.log(`Server is running on port ${PORT}`);
 })
