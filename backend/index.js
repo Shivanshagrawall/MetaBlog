@@ -11,6 +11,15 @@ const app=express();
 
 // Middleware
 app.use(express.json());
+const corsOptions = {
+    origin: 'https://meta-blog-frontend-chi.vercel.app', // Frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+  };
+  
+  // Use CORS middleware
+  app.use(cors(corsOptions));
+  
 app.use(cors());
 await connectDB();
 
